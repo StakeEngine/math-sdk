@@ -1,4 +1,4 @@
-game_name;0_0_lines
+game_name;2_20_96
 bet_type;base
 num_show_pigs;5000
 num_pigs_per_fence;10000

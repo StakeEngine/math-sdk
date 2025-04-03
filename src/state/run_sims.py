@@ -49,6 +49,7 @@ def create_books(
                 write_event_list=config.write_event_list,
                 profiling=profiling,
             )
+
             output_lookup_and_force_files(
                 threads,
                 batch_size,

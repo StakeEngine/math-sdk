@@ -25,7 +25,7 @@ class OptimizationSetup:
                 },
                 "scaling": ConstructScaling(
                     [
-                        {"criteria": "basegame", "scale_factor": 1.2, "win_range": (1, 2), "probability": 1.0},
+                        {"criteria": "basegame", "scale_factor": 5, "win_range": (2, 5), "probability": 1.0},
                         {"criteria": "basegame", "scale_factor": 1.5, "win_range": (10, 20), "probability": 1.0},
                         {
                             "criteria": "freegame",
