@@ -113,12 +113,13 @@ def make_temp_math_config(gamestate):
                 fence_info["identity_condition"] = {}
                 fence_info["identity_condition"]["search"] = []
                 if fence_obj["force_search"] != {}:
-                    fence_info["identity_condition"]["search"].append(
-                        {
-                            "name": str(list(fence_obj["force_search"].keys())[0]),
-                            "value": str(list(fence_obj["force_search"].values())[0]),
-                        }
-                    )
+                    for search_key, search_val in fence_obj["force_search"].items():
+                        fence_info["identity_condition"]["search"].append(
+                            {
+                                "name": str(search_key),
+                                "value": str(search_val),
+                            }
+                        )
                 fence_info["identity_condition"]["win_range_start"] = fence_obj["search_range"][0]
                 fence_info["identity_condition"]["win_range_end"] = fence_obj["search_range"][1]
                 fence_info["identity_condition"]["opposite"] = False
