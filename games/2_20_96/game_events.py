@@ -6,6 +6,8 @@ from src.events.events import json_ready_sym
 
 NEW_EXP_WILDS = "newExpandingWilds"
 UPDATE_EXP_WILDS = "updateExpandingWilds"
+WILD_EXPAND_START = "wildExpandStart"
+WILD_MULT_UPDATE = "wildMultiplierUpdate"
 WIN_DATA = "winInfo"
 
 
@@ -16,7 +18,11 @@ def new_expanding_wild_event(gamestate) -> None:
         for ew in new_exp_wilds:
             ew["row"] += 1
 
-    event = {"index": len(gamestate.book.events), "type": NEW_EXP_WILDS, "newWilds": new_exp_wilds}
+    event = {
+        "index": len(gamestate.book.events),
+        "type": NEW_EXP_WILDS,
+        "newWilds": new_exp_wilds,
+    }
     gamestate.book.add_event(event)
 
 
@@ -30,7 +36,40 @@ def update_expanding_wild_event(gamestate) -> None:
                 ew["row"] += 1
                 wild_event.append(ew)
 
-    event = {"index": len(gamestate.book.events), "type": UPDATE_EXP_WILDS, "existingWilds": wild_event}
+    event = {
+        "index": len(gamestate.book.events),
+        "type": UPDATE_EXP_WILDS,
+        "existingWilds": wild_event,
+    }
+    gamestate.book.add_event(event)
+
+
+def wild_expand_start_event(gamestate, reel, row) -> None:
+    """ """
+    if gamestate.config.include_padding:
+        row += 1
+
+    event = {
+        "index": len(gamestate.book.events),
+        "type": WILD_EXPAND_START,
+        "reel": reel,
+        "startRow": row,
+    }
+    gamestate.book.add_event(event)
+
+
+def wild_multiplier_update_event(gamestate, reel, row, multiplier) -> None:
+    """ """
+    if gamestate.config.include_padding:
+        row += 1
+
+    event = {
+        "index": len(gamestate.book.events),
+        "type": WILD_MULT_UPDATE,
+        "reel": reel,
+        "row": row,
+        "multiplier": multiplier,
+    }
     gamestate.book.add_event(event)
 
 
@@ -41,12 +80,18 @@ def reveal_board_event(gamestate):
     for reel in range(len(gamestate.board)):
         board_client.append([])
         for row in range(len(gamestate.board[reel])):
-            board_client[reel].append(json_ready_sym(gamestate.board[reel][row], special_attributes))
+            board_client[reel].append(
+                json_ready_sym(gamestate.board[reel][row], special_attributes)
+            )
 
     if gamestate.config.include_padding:
         for reel in range(len(board_client)):
-            board_client[reel] = [json_ready_sym(gamestate.top_symbols[reel], special_attributes)] + board_client[reel]
-            board_client[reel].append(json_ready_sym(gamestate.bottom_symbols[reel], special_attributes))
+            board_client[reel] = [
+                json_ready_sym(gamestate.top_symbols[reel], special_attributes)
+            ] + board_client[reel]
+            board_client[reel].append(
+                json_ready_sym(gamestate.bottom_symbols[reel], special_attributes)
+            )
 
     event = {
         "index": len(gamestate.book.events),
@@ -57,4 +102,3 @@ def reveal_board_event(gamestate):
         "anticipation": gamestate.anticipation,
     }
     gamestate.book.add_event(event)
-
