@@ -77,6 +77,44 @@ class OptimizationSetup:
                     score_type="rtp",
                 ).return_dict(),
             },
+            "bonus1Battle": {
+                "conditions": {
+                    "wincap": ConstructConditions(rtp=0.01, av_win=20000, search_conditions=20000).return_dict(),
+                    "freegame": ConstructConditions(rtp=0.6034, hr="x").return_dict(),
+                    "superfreegame": ConstructConditions(rtp=0.35, hr="x").return_dict(),
+                },
+                "scaling": ConstructScaling([]).return_dict(),
+                "parameters": ConstructParameters(
+                    num_show=5000,
+                    num_per_fence=10000,
+                    min_m2m=4,
+                    max_m2m=8,
+                    pmb_rtp=1.0,
+                    sim_trials=5000,
+                    test_spins=[10, 20, 50],
+                    test_weights=[0.6, 0.2, 0.2],
+                    score_type="rtp",
+                ).return_dict(),
+            },
+            "bonus2Battle": {
+                "conditions": {
+                    "wincap": ConstructConditions(rtp=0.01, av_win=20000, search_conditions=20000).return_dict(),
+                    "freegame": ConstructConditions(rtp=0.6034, hr="x").return_dict(),
+                    "superfreegame": ConstructConditions(rtp=0.35, hr="x").return_dict(),
+                },
+                "scaling": ConstructScaling([]).return_dict(),
+                "parameters": ConstructParameters(
+                    num_show=5000,
+                    num_per_fence=10000,
+                    min_m2m=4,
+                    max_m2m=8,
+                    pmb_rtp=1.0,
+                    sim_trials=5000,
+                    test_spins=[10, 20, 50],
+                    test_weights=[0.6, 0.2, 0.2],
+                    score_type="rtp",
+                ).return_dict(),
+            },
             "ante": {
                 "conditions": {
                     "wincap": ConstructConditions(rtp=0.01, av_win=20000, search_conditions=20000).return_dict(),

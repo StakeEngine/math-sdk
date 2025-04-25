@@ -21,10 +21,12 @@ if __name__ == "__main__":
     # Simulation counts per mode
     num_sim_args = {
         "base": int(1e4),
+        "ante": int(1e4),
+        "feature_spin": int(1e4),
         "bonus1": int(1e4),
         "bonus2": int(1e4),
-        "feature_spin": int(1e4),
-        "ante": int(1e4),
+        "bonus1Battle": int(1e4),
+        "bonus2Battle": int(1e4),
     }
 
     run_conditions = {
@@ -34,7 +36,7 @@ if __name__ == "__main__":
         "upload_data": False,
     }
 
-    target_modes = ["base", "bonus1", "bonus2", "feature_spin", "ante"]
+    target_modes = ["base", "ante", "feature_spin", "bonus1", "bonus2", "bonus1Battle", "bonus2Battle"]
 
     config = GameConfig()
     gamestate = GameState(config)
