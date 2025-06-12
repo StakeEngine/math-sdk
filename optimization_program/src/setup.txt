@@ -1,4 +1,4 @@
-game_name;0_0_ways
+game_name;0_0_cluster
 bet_type;bonus
 num_show_pigs;5000
 num_pigs_per_fence;10000
@@ -10,5 +10,5 @@ test_spins_weights;[0.6,0.2,0.2]
 simulation_trials;5000
 graph_indexes;0
 run_1000_batch;False
-path_to_games;/Users/DeclanArmstrong/GitRepos/math-sdk/games
+path_to_games;/home/rizzinrabbit/Developer/math-sdk/games
 pmb_rtp;1.0

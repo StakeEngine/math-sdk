@@ -25,3 +25,19 @@ __pycache__
 
 **/site/*
 
+# Python Virtual Environment
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Build and distribution artifacts
+/dist/
+/build/
+*.egg-info/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
