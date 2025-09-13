@@ -1,0 +1,19 @@
+{
+  "name": "pocketmon-genesis",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build:demo": "tsc -p tsconfig.run.json",
+    "demo": "npm run build:demo && node dist-run/scripts/spin_demo.js",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "simulate": "npm run build:demo && node dist-run/scripts/simulate.js",
+    "calibrate": "npm run build:demo && node dist-run/scripts/calibrate.js --spins=200000 --targetRTP=0.95"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.5"
+  }
+}
