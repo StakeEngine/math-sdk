@@ -36,6 +36,8 @@ def create_books(
     startTime = time.time()
     print("\nCreating books...")
     for betmode_name in num_sim_args:
+        gamestate.freegame_index = 0
+        gamestate.wincap_index = 0
         if num_sim_args[betmode_name] > 0:
             gamestate.betmode = betmode_name
             run_multi_process_sims(

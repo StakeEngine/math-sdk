@@ -1,4 +1,4 @@
-from copy import copy
+from copy import copy, deepcopy
 from abc import ABC, abstractmethod
 from warnings import warn
 import random
@@ -39,9 +39,17 @@ class GeneralGameState(ABC):
             "totalWin": 0,
             "wins": [],
         }
+        self.gen_freegame_rng()
         self.reset_seed()
         self.reset_book()
         self.reset_fs_spin()
+
+    def gen_freegame_rng(self):
+        self.freegame_offset = int(1e6)
+        self.wincap_offset = int(1e8)
+        self.wincap_index = 0
+        self.freegame_index = 0
+        self.zero_index = 0
 
     def create_symbol_map(self) -> None:
         """Construct all valid symbols from config file (from pay-table and special symbols)."""
@@ -84,9 +92,12 @@ class GeneralGameState(ABC):
         self.repeat = False
         self.anticipation = [0] * self.config.num_reels
 
-    def reset_seed(self, sim: int = 0) -> None:
+    def reset_seed(self, sim: int = 0, seed_override=None) -> None:
         """Reset rng seed to simulation number for reproducibility."""
-        random.seed(sim + 1)
+        if seed_override is not None:
+            random.seed(seed_override + 1)
+        else:
+            random.seed(sim + 1)
         self.sim = sim
         self.repeat_count = 0
 
@@ -220,7 +231,7 @@ class GeneralGameState(ABC):
         self.check_current_repeat_count()
 
     @abstractmethod
-    def run_spin(self, sim):
+    def run_spin(self, sim, thread_index):
         """run_spin should be defined in gamestate."""
         print("Base Game is not implemented in this game. Currently passing when calling runSpin.")
 
@@ -258,7 +269,7 @@ class GeneralGameState(ABC):
             (thread_index + 1) * num_sims + (total_threads * num_sims) * repeat_count,
         ):
             self.criteria = sim_to_criteria[sim]
-            self.run_spin(sim)
+            self.run_spin(sim, thread_index)
         mode_cost = self.get_current_betmode().get_cost()
 
         print(
