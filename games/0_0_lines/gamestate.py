@@ -10,10 +10,10 @@ class GameState(GameStateOverride):
     def run_spin(self, sim, thread_index):
         sim_override = None
         if self.get_current_distribution_conditions()["force_wincap"]:
-            sim_override = deepcopy(thread_index * self.wincap_offset + self.wincap_index)
+            sim_override = thread_index * self.wincap_offset + self.wincap_index
             self.wincap_index += 1
         elif self.get_current_distribution_conditions()["force_freegame"]:
-            sim_override = deepcopy(thread_index * self.freegame_offset + self.freegame_index)
+            sim_override = thread_index * self.freegame_offset + self.freegame_index
             self.freegame_index += 1
 
         self.reset_seed(sim, sim_override)

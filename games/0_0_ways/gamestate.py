@@ -6,7 +6,7 @@ from game_override import GameStateOverride
 class GameState(GameStateOverride):
     """Handle basegame and freegame logic."""
 
-    def run_spin(self, sim: int) -> None:
+    def run_spin(self, sim: int, thread_index=None) -> None:
         self.reset_seed(sim)
         self.repeat = True
         while self.repeat:
