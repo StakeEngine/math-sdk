@@ -57,7 +57,6 @@ class GameExecutables(GameCalculations):
         Scatter.record_scatter_wins(self)
         self.win_manager.tumble_win = self.win_data["totalWin"]
         self.win_manager.update_spinwin(self.win_data["totalWin"])  # Update wallet
-        self.emit_tumble_win_events()  # Transmit win information
 
     def update_freespin(self) -> None:
         """Called before a new reveal during freegame."""
