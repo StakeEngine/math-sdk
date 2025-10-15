@@ -2,6 +2,7 @@ __pycache__
 */.pyc
 *.prof
 */setup.txt
+*/setup.toml
 *.egg-info/
 */SOURCES.txt
 
