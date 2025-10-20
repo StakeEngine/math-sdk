@@ -57,6 +57,6 @@ if __name__ == "__main__":
     plot_function_shapes(fg_wins, base_fg_norm, new_fg_norm, bonus_norm)
 
     file_name = f"games/{GAME_ID}/library/publish_files/LookUpTable_base_0.csv"
-    ans = input("Proceede with file override (y/n): {fname}?")
+    ans = input(f"Proceede with file override (y/n): {file_name}?")
     if str(ans).lower() == "y":
         override_optimized_lookup(file_name, base_table.payouts_ints, new_base_weights)

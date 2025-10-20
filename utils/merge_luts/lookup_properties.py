@@ -119,7 +119,7 @@ def override_optimized_lookup(filename, base_payout, new_weights, sim_start=1):
 
 
 def plot_function_shapes(payouts, old_base_weights, new_base_weights, bonus_weights):
-
+    """visual confirmstion that distribution shapes match"""
     plt.scatter(payouts, old_base_weights, color="b")
     plt.scatter(payouts, new_base_weights, color="g")
     plt.scatter(payouts, bonus_weights, color="r", marker="x")
