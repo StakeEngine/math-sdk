@@ -17,7 +17,7 @@ class GameConfig(Config):
 
     def __init__(self):
         super().__init__()
-        self.game_id = "0_0_lines"
+        self.game_id = "0_0_lines_feature_match"
         self.provider_number = 0
         self.working_name = "Sample Lines Game"
         self.wincap = 5000.0
@@ -278,7 +278,6 @@ class GameConfig(Config):
             "force_wincap": False,
             "force_freegame": False,
         }
-        # Contains all game-logic simulation conditions
         self.bet_modes = [
             BetMode(
                 name="base",
@@ -290,11 +289,11 @@ class GameConfig(Config):
                 is_buybonus=False,
                 distributions=[
                     Distribution(
-                        criteria="wincap", quota=0.001, win_criteria=self.wincap, conditions=wincap_condition
+                        criteria="wincap", fixed_amt=50, win_criteria=self.wincap, conditions=wincap_condition
                     ),
-                    Distribution(criteria="freegame", quota=0.1, conditions=freegame_condition),
-                    Distribution(criteria="0", quota=0.4, win_criteria=0.0, conditions=zerowin_condition),
-                    Distribution(criteria="basegame", quota=0.5, conditions=basegame_condition),
+                    Distribution(criteria="freegame", fixed_amt=950, conditions=freegame_condition),
+                    Distribution(criteria="0", fixed_amt=4000, win_criteria=0.0, conditions=zerowin_condition),
+                    Distribution(criteria="basegame", fixed_amt=5000, conditions=basegame_condition),
                 ],
             ),
             BetMode(
@@ -307,9 +306,9 @@ class GameConfig(Config):
                 is_buybonus=True,
                 distributions=[
                     Distribution(
-                        criteria="wincap", quota=0.001, win_criteria=self.wincap, conditions=wincap_condition
+                        criteria="wincap", fixed_amt=50, win_criteria=self.wincap, conditions=wincap_condition
                     ),
-                    Distribution(criteria="freegame", quota=0.1, conditions=freegame_condition),
+                    Distribution(criteria="freegame", fixed_amt=950, conditions=freegame_condition),
                 ],
             ),
         ]

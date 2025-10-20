@@ -43,6 +43,9 @@ class GeneralGameState(ABC):
         self.reset_seed()
         self.reset_book()
         self.reset_fs_spin()
+        self.bonus_pays = None
+        self.bonus_criteria = []
+        self.counter = 0
 
     def gen_freegame_rng(self):
         self.freegame_offset = int(1e6)

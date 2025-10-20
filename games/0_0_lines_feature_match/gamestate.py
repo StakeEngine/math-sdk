@@ -42,6 +42,7 @@ class GameState(GameStateOverride):
 
             self.evaluate_finalwin()
             self.check_repeat()
+
         self.imprint_wins()
 
     def run_freespin(self):

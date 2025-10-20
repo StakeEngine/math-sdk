@@ -10,7 +10,8 @@ class Distribution:
     def __init__(
         self,
         criteria: str = None,
-        quota: int = 0,
+        quota: int = None,
+        fixed_amt: int = None,
         win_criteria: Union[float, None] = None,
         conditions: dict = {},
         required_distribution_conditions: list = [
@@ -19,10 +20,13 @@ class Distribution:
         default_distribution_conditions: dict = {"force_wincap": False, "force_freegame": False},
     ):
 
-        assert quota > 0, "non-zero quota value must be assigned"
+        if fixed_amt is None:
+            assert quota > 0, "non-zero quota value must be assigned"
+        assert sum([quota is None, fixed_amt is None]) == 1, "must define either quota or fixed simulation amount"
 
         self._quota = quota
         self._criteria = criteria
+        self._fixed_amt = fixed_amt
         self._required_distribution_conditions = required_distribution_conditions
         self._default_distribution_conditions = default_distribution_conditions
         self._win_criteria = win_criteria
@@ -55,6 +59,10 @@ class Distribution:
     def get_required_distribution_conditions(self):
         """Return what win conditions must be specified."""
         return self._required_distribution_conditions
+
+    def get_fixed_amt(self):
+        """Return fixed simulation amount for distribtuion"""
+        return self._fixed_amt
 
     def __str__(self):
         return f"Criteria: {self._criteria}\nConditions: {json.dumps(self._conditions)}"
