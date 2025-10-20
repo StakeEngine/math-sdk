@@ -5,7 +5,10 @@ Output statistics tested via RGS
 
 import json
 import os
+import warnings
+import argparse
 import importlib
+from itertools import combinations
 from io import TextIOWrapper
 import numpy as np
 import zstandard as zst
@@ -197,6 +200,7 @@ def get_lut_statistics(
 def execute_all_tests(config, excluded_modes=[]):
     """Run all tests for a given game"""
     mode_stats = []
+    mode_rtps = []
     for bet_mode in config.bet_modes:
         name = bet_mode.get_name()
         cost = bet_mode.get_cost()
@@ -217,8 +221,14 @@ def execute_all_tests(config, excluded_modes=[]):
             StatsObject = get_lut_statistics(
                 win_dist, cost, lut_payouts, weights_range, min_win, max_win, num_events
             )
+            mode_rtps.append(StatsObject.rtp)
             setattr(StatsObject, "name", name)
             mode_stats.append(StatsObject)
+
+    if len(mode_rtps) > 1:
+        max_rtp_diff = max(abs(a - b) for a, b in combinations(mode_rtps, 2))
+        if max_rtp_diff > 0.05:
+            warnings.warn(f"\n\nMode RTP difference exceedes allowed difference for approvals: {max_rtp_diff}\n")
 
     fname = f"games/{config.game_id}/library/stats_summary.json"
     write_all_stats(mode_stats, fname)
@@ -246,8 +256,16 @@ def load_game_config(game_id: str):
     return config()
 
 
+def main():
+    """parse commandline arguments"""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-g", dest="games", nargs="+")
+    arguments = parser.parse_args()
+    for game_id in arguments.games:
+        game_config = load_game_config(game_id)
+        execute_all_tests(game_config)
+
+
 if __name__ == "__main__":
 
-    game_id = "0_0_lines"
-    GameConfig = load_game_config(game_id)
-    execute_all_tests(GameConfig)
+    main()
