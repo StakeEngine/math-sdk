@@ -289,11 +289,11 @@ class GameConfig(Config):
                 is_buybonus=False,
                 distributions=[
                     Distribution(
-                        criteria="wincap", fixed_amt=50, win_criteria=self.wincap, conditions=wincap_condition
+                        criteria="wincap", quota=0.01, win_criteria=self.wincap, conditions=wincap_condition
                     ),
-                    Distribution(criteria="freegame", fixed_amt=950, conditions=freegame_condition),
-                    Distribution(criteria="0", fixed_amt=4000, win_criteria=0.0, conditions=zerowin_condition),
-                    Distribution(criteria="basegame", fixed_amt=5000, conditions=basegame_condition),
+                    Distribution(criteria="freegame", fixed_amt=5000, conditions=freegame_condition),
+                    Distribution(criteria="0", quota=0.4, win_criteria=0.0, conditions=zerowin_condition),
+                    Distribution(criteria="basegame", quota=0.6, conditions=basegame_condition),
                 ],
             ),
             BetMode(
@@ -306,9 +306,9 @@ class GameConfig(Config):
                 is_buybonus=True,
                 distributions=[
                     Distribution(
-                        criteria="wincap", fixed_amt=50, win_criteria=self.wincap, conditions=wincap_condition
+                        criteria="wincap", quota=0.01, win_criteria=self.wincap, conditions=wincap_condition
                     ),
-                    Distribution(criteria="freegame", fixed_amt=950, conditions=freegame_condition),
+                    Distribution(criteria="freegame", fixed_amt=5000, conditions=freegame_condition),
                 ],
             ),
         ]

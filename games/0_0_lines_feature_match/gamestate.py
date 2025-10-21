@@ -4,16 +4,8 @@ from game_override import GameStateOverride
 class GameState(GameStateOverride):
     """Handles game logic and events for a single simulation number/game-round."""
 
-    def run_spin(self, sim, thread_index):
-        sim_override = None
-        if self.get_current_distribution_conditions()["force_wincap"]:
-            sim_override = (thread_index + 1) * self.wincap_offset + self.wincap_index
-            self.wincap_index += 1
-        elif self.get_current_distribution_conditions()["force_freegame"]:
-            sim_override = (thread_index + 1) * self.freegame_offset + self.freegame_index
-            self.freegame_index += 1
-
-        self.reset_seed(sim, sim_override)
+    def run_spin(self, sim, simulation_seed):
+        self.reset_seed(sim, simulation_seed)
         self.repeat = True
         while self.repeat:
             self.reset_book()

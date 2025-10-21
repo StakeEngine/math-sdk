@@ -231,7 +231,7 @@ class GeneralGameState(ABC):
         self.check_current_repeat_count()
 
     @abstractmethod
-    def run_spin(self, sim, thread_index):
+    def run_spin(self, sim, simulation_seed):
         """run_spin should be defined in gamestate."""
         print("Base Game is not implemented in this game. Currently passing when calling runSpin.")
 
@@ -252,6 +252,7 @@ class GeneralGameState(ABC):
         repeat_count,
         compress=True,
         write_event_list=True,
+        simulation_seeds=[],
     ) -> None:
         """Assigns criteria and runs individual simulations. Results are stored in temporary file to be combined when all threads are finished."""
         mode_max_win = None
@@ -269,7 +270,7 @@ class GeneralGameState(ABC):
             (thread_index + 1) * num_sims + (total_threads * num_sims) * repeat_count,
         ):
             self.criteria = sim_to_criteria[sim]
-            self.run_spin(sim, thread_index)
+            self.run_spin(sim, simulation_seeds[sim])
         mode_cost = self.get_current_betmode().get_cost()
 
         print(

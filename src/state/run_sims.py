@@ -1,5 +1,7 @@
 import time
+import math
 import random
+import hashlib
 from multiprocessing import Process, Manager
 import cProfile
 from warnings import warn
@@ -50,13 +52,7 @@ def create_books(
 
         if num_sim_args[betmode_name] > 0:
             gamestate.betmode = betmode_name
-            nsims = num_sim_args[betmode_name]
-            if sim_counter > 0:
-                nsims = sim_counter
-                assert (
-                    num_sim_args[betmode_name] == sim_counter
-                ), "mismatch between requested and config simulation numbers"
-
+            nsims = max(num_sim_args[betmode_name], sim_counter)
             run_multi_process_sims(
                 threads,
                 batch_size,
@@ -109,6 +105,12 @@ def assign_sim_criteria(num_sims_criteria: Dict[str, int], sims: int) -> Dict[in
     return {i: sim_allocation[i] for i in range(min(sims, len(sim_allocation)))}
 
 
+def string_to_int(s: str) -> int:
+    "Convert criteria name to large integer value"
+    h = hashlib.sha256(s.encode()).hexdigest()
+    return int(h[:12], 16)
+
+
 async def profile_and_visualize(
     game_id,
     gamestate,
@@ -121,11 +123,12 @@ async def profile_and_visualize(
     repeat,
     compress,
     write_event_list,
+    simulation_seeds,
 ):
     """Create flame-graph, automatically opens output on localhost."""
     output_string = f"games/{game_id}/simulationProfile_{betmode}.prof"
     cProfile.runctx(
-        "gamestate.run_sims(all_betmode_configs, betmode, sim_allocation, threads, num_repeats, sims_per_thread, 0, repeat, compress, write_event_list)",
+        "gamestate.run_sims(all_betmode_configs, betmode, sim_allocation, threads, num_repeats, sims_per_thread, 0, repeat, compress, write_event_list, simulation_seeds)",
         globals(),
         locals(),
         output_string,
@@ -151,18 +154,55 @@ def run_multi_process_sims(
     sims_per_thread = int(num_sims / threads / num_repeats)
     if not set_sim_amount:
         num_sims_criteria = get_sim_splits(gamestate, num_sims, betmode)
-        sim_allocation = assign_sim_criteria(num_sims_criteria, num_sims)
+        sim_criteria = assign_sim_criteria(num_sims_criteria, num_sims)
+        simulation_seeds = [i for i in range(len(sim_criteria))]
+        criteria_assignment = list(sim_criteria.values())
     else:
         for bm in gamestate.config.bet_modes:
             if bm.get_name() == betmode:
                 dists = bm.get_distributions()
-                sim_allocation, criteria_assignment = {}, []
+                criteria_assignment, simulation_seeds = [], []
+                total_quota = 0.0
+                # populate fixed amount first
                 for d in dists:
                     dist_criteria = d.get_criteria()
-                    criteria_assignment.extend([str(dist_criteria) for _ in range(d.get_fixed_amt())])
-                random.shuffle(criteria_assignment)
-                for i, _ in enumerate(criteria_assignment):
-                    sim_allocation[i] = criteria_assignment[i]
+                    if d.get_fixed_amt() is not None:
+                        criteria_assignment.extend([str(dist_criteria) for _ in range(d.get_fixed_amt())])
+                    else:
+                        total_quota += d.get_quota()
+                # populate remaining with quota
+                if len(criteria_assignment) < num_sims:
+                    quota_assignment = []
+                    quota_probs = []
+                    for d in dists:
+                        dist_criteria = d.get_criteria()
+                        if d.get_quota() is not None:
+                            quota_assignment.append(dist_criteria)
+                            quota_probs.append(d.get_quota())
+                            ncriteria = math.floor(
+                                max(1, (d.get_quota() / total_quota) * (num_sims - len(criteria_assignment)))
+                            )
+                            counter = 0
+                            while (len(criteria_assignment) < num_sims) and (counter < ncriteria):
+                                criteria_assignment.append(dist_criteria)
+                                counter += 1
+                    while len(criteria_assignment) < num_sims:
+                        criteria_assignment.append(random.choices(quota_assignment, quota_probs, k=1)[0])
+
+                    random.shuffle(criteria_assignment)
+                break
+
+        unique_criteria = set(criteria_assignment)
+        criteria_offset = {}
+        criteria_counter = {}
+        for c in unique_criteria:
+            criteria_offset[c] = string_to_int(c)
+            criteria_counter[c] = 0
+        simulation_seeds = []
+        for c in criteria_assignment:
+            offset_val = criteria_offset[c] + criteria_counter[c]
+            criteria_counter[c] += 1
+            simulation_seeds.append(offset_val)
 
     for repeat in range(num_repeats):
         print("Batch", repeat + 1, "of", num_repeats)
@@ -176,20 +216,21 @@ def run_multi_process_sims(
                     gamestate=gamestate,
                     all_betmode_configs=all_betmode_configs,
                     betmode=betmode,
-                    sim_allocation=sim_allocation,
+                    sim_allocation=criteria_assignment,
                     threads=threads,
                     num_repeats=num_repeats,
                     sims_per_thread=sims_per_thread,
                     repeat=repeat,
                     compress=compress,
                     write_event_list=write_event_list,
+                    simulation_seeds=simulation_seeds,
                 )
             )
         elif threads == 1:
             gamestate.run_sims(
                 betmode_copy_list=all_betmode_configs,
                 betmode=betmode,
-                sim_to_criteria=sim_allocation,
+                sim_to_criteria=criteria_assignment,
                 total_threads=threads,
                 total_repeats=num_repeats,
                 num_sims=sims_per_thread,
@@ -197,6 +238,7 @@ def run_multi_process_sims(
                 repeat_count=repeat,
                 compress=compress,
                 write_event_list=write_event_list,
+                simulation_seeds=simulation_seeds,
             )
         else:
             for thread in range(threads):
@@ -205,7 +247,7 @@ def run_multi_process_sims(
                     args=(
                         all_betmode_configs,
                         betmode,
-                        sim_allocation,
+                        criteria_assignment,
                         threads,
                         num_repeats,
                         sims_per_thread,
@@ -213,6 +255,7 @@ def run_multi_process_sims(
                         repeat,
                         compress,
                         write_event_list,
+                        simulation_seeds,
                     ),
                 )
                 print("Started thread", thread)

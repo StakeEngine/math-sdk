@@ -11,7 +11,7 @@ from src.write_data.write_configs import generate_configs
 
 if __name__ == "__main__":
 
-    num_threads = 1
+    num_threads = 10
     rust_threads = 20
     batching_size = 5000
     compression = True
@@ -19,14 +19,14 @@ if __name__ == "__main__":
 
     num_sim_args = {
         "base": int(1e4),
-        "bonus": int(1e3),
+        "bonus": int(1e4),
     }
 
     run_conditions = {
         "run_sims": True,
         "run_optimization": True,
-        "run_analysis": False,
-        "run_format_checks": False,
+        "run_analysis": True,
+        "run_format_checks": True,
     }
     target_modes = list(num_sim_args.keys())
 

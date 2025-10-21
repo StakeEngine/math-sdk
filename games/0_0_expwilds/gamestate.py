@@ -11,7 +11,7 @@ from src.calculations.statistics import get_random_outcome
 class GameState(GameStateOverride):
     """Handle all game-logic and event updates for a given simulation number."""
 
-    def run_spin(self, sim, thread_index=None):
+    def run_spin(self, sim, simulation_seed=None):
         """Entry point for all game-modes."""
         self.reset_seed(sim)
         self.repeat = True
