@@ -1,10 +1,8 @@
 """Lookup table properties and helpful functions"""
 
 import os
-import hashlib
 from collections import defaultdict
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class LookupProperties:
@@ -93,36 +91,8 @@ def calculate_new_freegame_probabilities(
     return new_base_weights, fg_rtp_contribution, fg_act_hr, fg_weight_contribution
 
 
-def calculate_target_fg_hit_rate(fg_contribution_in_base, expectation_val_from_freegame_bonus):
-    """assign hit-rate of freegame in bonus"""
-    return fg_contribution_in_base / expectation_val_from_freegame_bonus
-
-
-def compare_payouts_array(array1, array2):
-    """verify freegame payouts match"""
-    array1_obj = hashlib.md5()
-    array2_obj = hashlib.md5()
-    for x, y in zip(array1, array2):
-        array1_obj.update(str(x).encode("utf-8"))
-        array2_obj.update(str(y).encode("utf-8"))
-
-    if array1_obj.hexdigest() != array2_obj.hexdigest():
-        return False
-    return True
-
-
 def override_optimized_lookup(filename, base_payout, new_weights, sim_start=1):
     """write new lookup table weights"""
     with open(filename, "w", encoding="utf-8") as f:
         for weight, payout in zip(new_weights, base_payout):
             f.write(f"{sim_start},{weight},{payout}" + "\n")
-
-
-def plot_function_shapes(payouts, old_base_weights, new_base_weights, bonus_weights):
-    """visual confirmstion that distribution shapes match"""
-    plt.scatter(payouts, old_base_weights, color="b")
-    plt.scatter(payouts, new_base_weights, color="g")
-    plt.scatter(payouts, bonus_weights, color="r", marker="x")
-    plt.grid(True)
-    plt.legend(["old weights", "new weights", "bonus weights"])
-    plt.show()

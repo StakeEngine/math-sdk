@@ -6,6 +6,7 @@ from game_optimization import OptimizationSetup
 from optimization_program.run_script import OptimizationExecution
 from utils.game_analytics.run_analysis import create_stat_sheet
 from utils.rgs_verification import execute_all_tests
+from utils.merge_luts.merge_lookups import run
 from src.state.run_sims import create_books
 from src.write_data.write_configs import generate_configs
 
@@ -50,6 +51,9 @@ if __name__ == "__main__":
 
     if run_conditions["run_optimization"]:
         OptimizationExecution().run_all_modes(config, target_modes, rust_threads)
+        # example of how to call the bonus-substitution program - apply feature
+        # probabilities to the base-game lookup-table
+        run(config.game_id, config.freegame_type, 1.0, True, False)
         generate_configs(gamestate)
 
     if run_conditions["run_analysis"]:
