@@ -23,6 +23,7 @@ __pycache__
 /env
 *.env
 *.DS_Store
+*.toml
 
 **/site/*
 

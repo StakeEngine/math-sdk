@@ -5,7 +5,7 @@ from src.calculations.scatter import Scatter
 class GameState(GameStateOverride):
     """Gamestate for a single spin"""
 
-    def run_spin(self, sim: int):
+    def run_spin(self, sim: int, simulation_seed=None):
         self.reset_seed(sim)
         self.repeat = True
         while self.repeat:

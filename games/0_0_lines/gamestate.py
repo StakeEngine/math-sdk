@@ -1,11 +1,10 @@
 from game_override import GameStateOverride
-from src.calculations.lines import Lines
 
 
 class GameState(GameStateOverride):
     """Handles game logic and events for a single simulation number/game-round."""
 
-    def run_spin(self, sim):
+    def run_spin(self, sim, simulation_seed=None):
         self.reset_seed(sim)
         self.repeat = True
         while self.repeat:
@@ -21,7 +20,6 @@ class GameState(GameStateOverride):
 
             self.evaluate_finalwin()
             self.check_repeat()
-
         self.imprint_wins()
 
     def run_freespin(self):

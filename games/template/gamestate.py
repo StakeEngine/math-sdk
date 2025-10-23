@@ -6,7 +6,7 @@ from game_override import GameStateOverride
 class GameState(GameStateOverride):
     """Handle all game-logic and event updates for a given simulation number."""
 
-    def run_spin(self, sim):
+    def run_spin(self, sim, simulation_seed=None):
         self.reset_seed(sim)
         self.repeat = True
         while self.repeat:

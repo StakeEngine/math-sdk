@@ -5,7 +5,7 @@ from game_events import update_grid_mult_event
 class GameState(GameStateOverride):
     """Core function handling simulation results."""
 
-    def run_spin(self, sim):
+    def run_spin(self, sim, simulation_seed=None):
         self.reset_seed(sim)
         self.repeat = True
         while self.repeat:
