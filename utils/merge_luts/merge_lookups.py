@@ -1,12 +1,16 @@
 """Given optimized bonus and base lookup tables, substitute bonus probabilities into basegame lookup"""
 
 import numpy as np
-from .lookup_properties import (
+from utils.merge_luts.lookup_properties import (
     LookupProperties,
     calculate_new_freegame_probabilities,
     override_optimized_lookup,
 )
-from .helper_funcs import compare_payouts_array, plot_function_shapes, print_solution_summary
+from utils.merge_luts.helper_funcs import (
+    compare_payouts_array,
+    plot_function_shapes,
+    print_solution_summary,
+)
 
 
 def run(game_id: str, swap_key: str, mode_cost: float, plot_overlay=False, override_table=False):
@@ -58,4 +62,4 @@ if __name__ == "__main__":
     BASE_COST = 1.0
     FREEGAME_KEY = "freegame"
 
-    run(GAME_ID, FREEGAME_KEY, BASE_COST, True)
+    run(GAME_ID, FREEGAME_KEY, BASE_COST, True, True)
