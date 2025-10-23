@@ -39,17 +39,9 @@ class GeneralGameState(ABC):
             "totalWin": 0,
             "wins": [],
         }
-        self.gen_freegame_rng()
         self.reset_seed()
         self.reset_book()
         self.reset_fs_spin()
-
-    def gen_freegame_rng(self):
-        self.freegame_offset = int(1e6)
-        self.wincap_offset = int(1e8)
-        self.wincap_index = 0
-        self.freegame_index = 0
-        self.zero_index = 0
 
     def create_symbol_map(self) -> None:
         """Construct all valid symbols from config file (from pay-table and special symbols)."""

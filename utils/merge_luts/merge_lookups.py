@@ -1,4 +1,6 @@
-"""Given optimized bonus and base lookup tables, substitute bonus probabilities into basegame lookup"""
+"""Given optimized bonus and base lookup tables, substitute bonus probabilities into basegame lookup
+NOTE: This feature is experimental....
+"""
 
 import numpy as np
 from utils.merge_luts.lookup_properties import (

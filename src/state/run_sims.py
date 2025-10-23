@@ -38,8 +38,6 @@ def create_books(
     startTime = time.time()
     print("\nCreating books...")
     for betmode_name in num_sim_args:
-        gamestate.freegame_index = 0
-        gamestate.wincap_index = 0
         sim_counter = 0
         for bm in config.bet_modes:
             if bm.get_name() == betmode_name:
