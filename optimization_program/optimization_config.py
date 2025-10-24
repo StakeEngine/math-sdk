@@ -164,7 +164,7 @@ def verify_optimization_input(game_config, opt_dict):
         for dist in bm._distributions:
             dist_keys.append(dist._criteria)
 
-        assert [x in criteria_list for x in dist_keys], "Distribution criteria must match 'conditions' keys"
+        assert all(x in criteria_list for x in dist_keys), "Distribution criteria must match 'conditions' keys"
 
         # Verify optimization segmentation matches target RTP
         bm_rtp = bm.get_rtp()
