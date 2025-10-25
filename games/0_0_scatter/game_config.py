@@ -98,7 +98,7 @@ class GameConfig(Config):
             self.freegame_type: min(self.freespin_triggers[self.freegame_type].keys()) - 1,
         }
         # Reels
-        reels = {"BR0": "BR0.csv", "FR0": "FR0.csv"}
+        reels = {"BR0": "BR0.csv", "FR0": "FR0.csv", "WCAP": "WCAP.csv"}
         self.reels = {}
         for r, f in reels.items():
             self.reels[r] = self.read_reels_csv(os.path.join(self.reels_path, f))
@@ -122,7 +122,7 @@ class GameConfig(Config):
                         conditions={
                             "reel_weights": {
                                 self.basegame_type: {"BR0": 1},
-                                self.freegame_type: {"FR0": 1},
+                                self.freegame_type: {"FR0": 1, "WCAP": 5},
                             },
                             "mult_values": {
                                 self.basegame_type: {10: 10},
@@ -192,7 +192,7 @@ class GameConfig(Config):
                         conditions={
                             "reel_weights": {
                                 self.basegame_type: {"BR0": 1},
-                                self.freegame_type: {"FR0": 1},
+                                self.freegame_type: {"FR0": 1, "WCAP": 5},
                             },
                             "mult_values": {
                                 self.basegame_type: {10: 10},

@@ -1,5 +1,6 @@
 """Main file for generating results for sample ways-pay game."""
 
+import time
 from gamestate import GameState
 from game_config import GameConfig
 from game_optimization import OptimizationSetup
@@ -13,13 +14,13 @@ if __name__ == "__main__":
 
     num_threads = 10
     rust_threads = 20
-    batching_size = 50000
+    batching_size = 10000
     compression = True
     profiling = False
 
     num_sim_args = {
-        "base": int(1e4),
-        "bonus": int(1e4),
+        "base": int(1e5),
+        "bonus": int(1e5),
     }
 
     run_conditions = {
@@ -35,6 +36,7 @@ if __name__ == "__main__":
     if run_conditions["run_optimization"] or run_conditions["run_analysis"]:
         optimization_setup_class = OptimizationSetup(config)
 
+    time_start = time.time()
     if run_conditions["run_sims"]:
         create_books(
             gamestate,
@@ -45,6 +47,7 @@ if __name__ == "__main__":
             compression,
             profiling,
         )
+    print(time.time() - time_start)
 
     generate_configs(gamestate)
 
