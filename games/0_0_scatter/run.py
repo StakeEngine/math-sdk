@@ -1,6 +1,5 @@
 """Main file for generating results for sample ways-pay game."""
 
-import time
 from gamestate import GameState
 from game_config import GameConfig
 from game_optimization import OptimizationSetup
@@ -36,7 +35,6 @@ if __name__ == "__main__":
     if run_conditions["run_optimization"] or run_conditions["run_analysis"]:
         optimization_setup_class = OptimizationSetup(config)
 
-    time_start = time.time()
     if run_conditions["run_sims"]:
         create_books(
             gamestate,
@@ -47,7 +45,6 @@ if __name__ == "__main__":
             compression,
             profiling,
         )
-    print(time.time() - time_start)
 
     generate_configs(gamestate)
 
