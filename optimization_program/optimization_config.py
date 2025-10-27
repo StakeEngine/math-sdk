@@ -65,6 +65,7 @@ class ConstructParameters:
         test_spins: list,
         test_weights: list,
         score_type: str = "rtp",
+        max_trial_dist: int = 15,
     ):
 
         self.parameters = {
@@ -77,6 +78,7 @@ class ConstructParameters:
             "test_spins": test_spins,
             "test_spins_weights": test_weights,
             "score_type": score_type,
+            "max_trial_dist": max_trial_dist,
         }
 
     def return_dict(self):

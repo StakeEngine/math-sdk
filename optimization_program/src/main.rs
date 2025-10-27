@@ -46,6 +46,7 @@ fn main() {
         config.min_mean_to_median,
         config.max_mean_to_median,
         config.pmb_rtp,
+        config.max_trial_dist,
     );
     println!("time taken {}ms", now.elapsed().as_secs());
 }
@@ -65,6 +66,7 @@ fn run_farm(
     min_mean_to_median: f64,
     max_mean_to_median: f64,
     pmb_rtp: f64,
+    max_trial_dist: u32,
 ) {
     println!("Running Simulations: {} - Mode: {}", game_name, bet_type);
 
@@ -169,6 +171,7 @@ fn run_farm(
                                 range: [0.0, 0.0],
                                 prob: 0.0,
                             }),
+                            max_trial_dist,
                         )
                     })
                     .collect()
@@ -892,7 +895,8 @@ fn create_ancestors(
     pig_heaven: &PigHeaven,
     min_mean_to_median: f64,
     max_mean_to_median: f64,
-    bias_application: BiasJson
+    bias_application: BiasJson,
+    max_trial_dist: u32,
 ) -> Vec<Pig> {
     let mut pos_pigs: Vec<Pig> = Vec::with_capacity((pig_heaven.num_pigs as f64).sqrt() as usize);
     let mut neg_pigs: Vec<Pig> = Vec::with_capacity((pig_heaven.num_pigs as f64).sqrt() as usize);
@@ -904,9 +908,9 @@ fn create_ancestors(
     let mut rng = rand::thread_rng();
 
     let mut loop_count = 0;
-    let mut amps: Vec<f64> = Vec::with_capacity(15);
-    let mut mus: Vec<f64> = Vec::with_capacity(15);
-    let mut stds: Vec<f64> = Vec::with_capacity(15);
+    let mut amps: Vec<f64> = Vec::with_capacity(max_trial_dist as usize);
+    let mut mus: Vec<f64> = Vec::with_capacity(max_trial_dist as usize);
+    let mut stds: Vec<f64> = Vec::with_capacity(max_trial_dist as usize);
     let mut already_printed = false;
     let mut bool_added_extra_parms = false;
 
@@ -932,7 +936,7 @@ fn create_ancestors(
         if (std_weight - 20.0).abs() < 0.00001 {
             go_back_down = false;
         }
-        let variables: u32 = rng.gen_range(5..=15);
+        let variables: u32 = rng.gen_range(5..=max_trial_dist);
         amps.clear();
         mus.clear();
         stds.clear();

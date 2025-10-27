@@ -27,6 +27,29 @@ def make_win_distribution(filepath: str, normalize: bool = True) -> dict:
     return dist
 
 
+def make_win_distribution_from_optimizer(filepath: str, normalize: bool = True) -> dict:
+    """Construct win-distribution with unique, ordered payouts."""
+    dist = defaultdict(float)
+    start_recording = False
+    with open(filepath, "r", encoding="UTF-8") as f:
+        for line in f:
+            if start_recording:
+                _, weight, payout = line.strip().split(",")
+                weight = int(weight)
+                payout = float(payout)
+                dist[payout] += weight
+            elif line.strip() == "Distribution":
+                start_recording = True
+
+    # Sort by win amount
+    dist = dict(sorted(dist.items(), key=lambda x: x[0], reverse=False))
+    if normalize:
+        total_weight = sum(dist.values())
+        dist = {x: y / total_weight for x, y in dist.items()}
+
+    return dist
+
+
 def get_distribution_average(dist: dict) -> float:
     """Return weighted average from ordered win distribution."""
     return np.average(list(dist.keys()), weights=list(dist.values()))
