@@ -1,6 +1,7 @@
 """Test file decompression and validate data structure is valid JSON."""
 
 import json
+import io
 import zstandard as zstd
 
 
@@ -18,19 +19,20 @@ def decompress(input_path: str, save_output: bool = False):
     decompressor = zstd.ZstdDecompressor()
     with open(input_path, "rb") as f:
         with decompressor.stream_reader(f) as reader:
-            decompressed_data = reader.read().decode("utf-8")
-
-    all_sims = decompressed_data.split("\n")
-    for sim in all_sims:
-        if sim.strip():
-            json_validate(sim)
+            txt_stream = io.TextIOWrapper(reader, encoding="utf-8")
+            lines = []
+            for line in txt_stream:
+                if line.strip():
+                    json_validate(line)
+                    lines.append(line)
 
     if save_output:
         with open("decompressed.jsonl", "w", encoding="UTF-8") as f:
-            f.write(json.dumps(decompressed_data, indent=4))
+            f.writelines(lines)
 
 
 if __name__ == "__main__":
 
-    test_file = "utils/books_base.jsonl.zst"
+    test_file = "games/0_0_lines/library/publish_files/books_base.jsonl.zst"
     decompress(test_file, save_output=True)
+    print(f"Decompressed file: {test_file}\nNo errors parsing JSON.")
