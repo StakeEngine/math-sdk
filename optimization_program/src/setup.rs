@@ -17,4 +17,5 @@ pub struct SetupConfig {
    pub min_mean_to_median: f64,
    pub max_mean_to_median:f64,
    pub pmb_rtp:f64,
+   pub max_trial_dist:u32,
 }

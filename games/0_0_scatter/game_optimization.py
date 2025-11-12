@@ -62,6 +62,7 @@ class OptimizationSetup:
                     test_spins=[50, 100, 200],
                     test_weights=[0.3, 0.4, 0.3],
                     score_type="rtp",
+                    max_trial_dist=15,
                 ).return_dict(),
                 "distribution_bias": ConstructFenceBias(
                     applied_criteria=["basegame"],
@@ -76,18 +77,6 @@ class OptimizationSetup:
                 },
                 "scaling": ConstructScaling(
                     [
-                        {
-                            "criteria": "freegame",
-                            "scale_factor": 0.9,
-                            "win_range": (20, 50),
-                            "probability": 1.0,
-                        },
-                        {
-                            "criteria": "freegame",
-                            "scale_factor": 0.8,
-                            "win_range": (1000, 2000),
-                            "probability": 1.0,
-                        },
                         {
                             "criteria": "freegame",
                             "scale_factor": 1.2,
@@ -106,11 +95,12 @@ class OptimizationSetup:
                     test_spins=[10, 20, 50],
                     test_weights=[0.6, 0.2, 0.2],
                     score_type="rtp",
+                    max_trial_dist=15,
                 ).return_dict(),
                 "distribution_bias": ConstructFenceBias(
                     applied_criteria=["freegame"],
                     bias_ranges=[(90.0, 150.0)],
-                    bias_weights=[0.3],
+                    bias_weights=[0.1],
                 ).return_dict(),
             },
         }
