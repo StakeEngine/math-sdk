@@ -67,7 +67,7 @@ class GeneralGameState(ABC):
         self.board = [[[] for _ in range(self.config.num_rows[x])] for x in range(self.config.num_reels)]
         self.top_symbols = None
         self.bottom_symbols = None
-        self.book_id = self.sim + 1
+        self.book_id = self.sim
         self.book = Book(self.book_id, self.criteria)
         self.win_data = {
             "totalWin": 0,
