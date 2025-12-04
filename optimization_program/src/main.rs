@@ -200,7 +200,7 @@ fn run_farm(
     let mut show_pigs: Vec<ShowPig> = thread_pool_show_pigs.install(|| {
         (0..threads_for_show_construction)
             .into_par_iter()
-            .flat_map(|_| {
+            .flat_map(|thread_index| {
                 create_show_pigs(
                     &fences,
                     num_show_pigs / threads_for_show_construction,
@@ -208,7 +208,7 @@ fn run_farm(
                     test_spins_weights,
                     simulation_trials,
                     bet_amount,
-                    1,
+                    thread_index,
                     &sorted_wins_array,
                     &pig_pens,
                     rtp,
