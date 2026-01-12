@@ -2,6 +2,8 @@
 
 
 class SymbolDefinition:
+    """Define symbol class object structure."""
+
     __slots__ = (
         "name",
         "special",
@@ -29,6 +31,8 @@ class SymbolDefinition:
 
 
 class Symbol:
+    """Symbol attributes must exist is __slots__ list."""
+
     __slots__ = (
         "defn",
         "explode",
@@ -53,25 +57,31 @@ class Symbol:
 
     @property
     def name(self):
+        """Get string symbol name."""
         return self.defn.name
 
     @property
     def is_special(self):
+        """Is a special symbol."""
         return self.defn.special
 
     @property
     def special_flags(self):
+        """Return all set special flags."""
         return self.defn.special_flags
 
     @property
     def is_wild(self):
+        """Is a Wild/"""
         return self.defn.wild
 
     @property
     def is_scatter(self):
+        """Is a Scatter."""
         return self.defn.scatter
 
     def check_attribute(self, *attrs):
+        """Check if symbol attribute exists/is set."""
         for a in attrs:
             val = getattr(self, a, None)
             if val not in (None, False):
@@ -81,6 +91,7 @@ class Symbol:
         return False
 
     def get_attribute(self, attr):
+        """Get attribute value (must exist)."""
         return getattr(self, attr)
 
     def assign_attribute(self, attribute_dict: dict) -> None:
@@ -122,6 +133,7 @@ class SymbolStorage:
             )
 
     def create_symbol(self, name: str):
+        """Create a new instance of symbol class."""
         try:
             return Symbol(self.symbol_defs[name])
         except KeyError:
