@@ -14,9 +14,9 @@ class GamestateTest(GeneralGameState):
         symbol.assign_attribute({"multiplier": 3})
 
     def create_symbol(self, name: str) -> object:
-        if name not in self.symbol_storage.symbols:
+        if name not in self.symbol_storage.symbol_defs.keys():
             raise ValueError(f"Symbol '{name}' is not registered.")
-        symObject = self.symbol_storage.create_symbol_state(name)
+        symObject = self.symbol_storage.create_symbol(name)
         if name in self.special_symbol_functions:
             for func in self.special_symbol_functions[name]:
                 func(symObject)

@@ -78,7 +78,11 @@ class Lines:
                 if wild_win > base_win:
                     positions = [{"reel": idx, "row": line[idx]} for idx in range(0, wild_matches)]
                     line_win, applied_mult = apply_mult(
-                        board, multiplier_method, global_multiplier=global_multiplier, win_amount=wild_win, positions=positions
+                        board,
+                        multiplier_method,
+                        global_multiplier=global_multiplier,
+                        win_amount=wild_win,
+                        positions=positions,
                     )
                     win_dict = Lines.line_win_info(
                         potential_line[0].name,
@@ -96,7 +100,11 @@ class Lines:
                 else:
                     positions = [{"reel": idx, "row": line[idx]} for idx in range(0, matches + wild_matches)]
                     line_win, applied_mult = apply_mult(
-                        board, multiplier_method, global_multiplier=global_multiplier, win_amount=base_win, positions=positions
+                        board,
+                        multiplier_method,
+                        global_multiplier=global_multiplier,
+                        win_amount=base_win,
+                        positions=positions,
                     )
                     win_dict = Lines.line_win_info(
                         first_non_wild.name,

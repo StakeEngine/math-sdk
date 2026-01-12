@@ -263,7 +263,7 @@ def make_fe_config(gamestate, json_padding=True, assign_properties=True, **kwarg
         json_info["paylines"] = gamestate.config.paylines
 
     symbols = {}
-    for sym in gamestate.symbol_storage.symbols.values():
+    for _, sym in gamestate.symbol_storage.symbol_defs.items():
         symbols[sym.name] = {}
         special_properties = []
         for prop in gamestate.config.special_symbols:

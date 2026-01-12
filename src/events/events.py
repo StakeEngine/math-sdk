@@ -8,10 +8,13 @@ def json_ready_sym(symbol: object, special_attributes: list = None):
     """Converts a symbol to dictionary/JSON format."""
     assert special_attributes is not None
     print_sym = {"name": symbol.name}
-    attrs = vars(symbol)
-    for key, val in attrs.items():
-        if key in special_attributes and symbol.get_attribute(key) != False:
-            print_sym[key] = val
+
+    for attr in special_attributes:
+        if hasattr(symbol, attr) and getattr(symbol, attr):
+            print_sym[attr] = True
+        elif attr in symbol.defn.special_flags:
+            print_sym[attr] = True
+
     return print_sym
 
 

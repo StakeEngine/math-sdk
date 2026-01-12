@@ -15,7 +15,7 @@ class Tumble(Board):
         for reel, _ in enumerate(static_board):
             exploding_symbols = 0
             copy_reel = static_board[reel]
-            exploding_symbols = sum(1 for x in static_board[reel] if x.check_attribute("explode"))
+            exploding_symbols = sum(1 for x in static_board[reel] if x.explode)
 
             for i in range(exploding_symbols):
                 reel_pos = (self.reel_positions[reel] - 1) % len(self.reelstrip[reel])
@@ -29,7 +29,7 @@ class Tumble(Board):
                     self.new_symbols_from_tumble[reel].insert(0, insert_sym)
                 copy_reel.insert(0, insert_sym)
 
-            copy_reel = [sym for sym in copy_reel if not (sym.check_attribute("explode"))]
+            copy_reel = [sym for sym in copy_reel if not (sym.explode)]
 
             if len(copy_reel) != self.config.num_rows[reel]:
                 raise RuntimeError(
