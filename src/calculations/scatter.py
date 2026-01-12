@@ -2,8 +2,8 @@
 
 from typing import List, Dict
 from collections import defaultdict
-from src.calculations.symbol import Symbol
 from src.config.config import Config
+from src.calculations.symbol import Symbol
 
 
 class Scatter:
@@ -66,7 +66,7 @@ class Scatter:
                     if board[p["reel"]][p["row"]].check_attribute(multiplier_key):
                         symbol_mult += board[p["reel"]][p["row"]].get_attribute(multiplier_key)
 
-                    board[p["reel"]][p["row"]].assign_attribute({"explode": True})
+                    board[p["reel"]][p["row"]].explode = True
 
                 symbol_mult = max(symbol_mult, 1)
                 overlay_position = Scatter.get_central_scatter_position(
