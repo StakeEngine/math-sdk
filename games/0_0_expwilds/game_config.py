@@ -99,13 +99,13 @@ class GameConfig(Config):
             "freegame": self.reels["FR0"],
             "superspin": self.reels["SSR"],
         }
-
+        mode_maxwins = {"base": 5000, "bonus": 5000, "superspin": 2000}
         self.bet_modes = [
             BetMode(
                 name="base",
                 cost=1.0,
                 rtp=self.rtp,
-                max_win=self.wincap,
+                max_win=mode_maxwins["base"],
                 auto_close_disabled=False,
                 is_feature=True,
                 is_buybonus=False,
@@ -113,7 +113,7 @@ class GameConfig(Config):
                     Distribution(
                         criteria="wincap",
                         quota=0.001,
-                        win_criteria=self.wincap,
+                        win_criteria=mode_maxwins["base"],
                         conditions={
                             "reel_weights": {
                                 self.basegame_type: {"BR0": 1},
@@ -170,7 +170,7 @@ class GameConfig(Config):
                 name="bonus",
                 cost=200.0,
                 rtp=self.rtp,
-                max_win=self.wincap,
+                max_win=mode_maxwins["bonus"],
                 auto_close_disabled=False,
                 is_feature=False,
                 is_buybonus=True,
@@ -178,7 +178,7 @@ class GameConfig(Config):
                     Distribution(
                         criteria="wincap",
                         quota=0.001,
-                        win_criteria=self.wincap,
+                        win_criteria=mode_maxwins["bonus"],
                         conditions={
                             "reel_weights": {
                                 self.basegame_type: {"BR0": 1},
@@ -216,7 +216,7 @@ class GameConfig(Config):
                 name="superspin",
                 cost=50,
                 rtp=self.rtp,
-                max_win=self.wincap,
+                max_win=mode_maxwins["superspin"],
                 auto_close_disabled=False,
                 is_feature=True,
                 is_buybonus=False,
@@ -224,7 +224,7 @@ class GameConfig(Config):
                     Distribution(
                         criteria="wincap",
                         quota=0.001,
-                        win_criteria=self.wincap,
+                        win_criteria=mode_maxwins["superspin"],
                         conditions={
                             "reel_weights": {
                                 self.basegame_type: {"SSR": 1, "SSWCAP": 5},

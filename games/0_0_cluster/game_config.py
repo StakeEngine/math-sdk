@@ -85,15 +85,15 @@ class GameConfig(Config):
         reels = {"BR0": "BR0.csv", "FR0": "FR0.csv", "WCAP": "WCAP.csv"}
         self.reels = {}
         for r, f in reels.items():
-            self.reels[r] = self.read_reels_csv(
-                os.path.join(self.reels_path, f))
+            self.reels[r] = self.read_reels_csv(os.path.join(self.reels_path, f))
+        mode_maxwins = {"base": 5000, "bonus": 5000}
 
         self.bet_modes = [
             BetMode(
                 name="base",
                 cost=1.0,
                 rtp=self.rtp,
-                max_win=self.wincap,
+                max_win=mode_maxwins["base"],
                 auto_close_disabled=False,
                 is_feature=True,
                 is_buybonus=False,
@@ -101,7 +101,7 @@ class GameConfig(Config):
                     Distribution(
                         criteria="wincap",
                         quota=0.001,
-                        win_criteria=self.wincap,
+                        win_criteria=mode_maxwins["base"],
                         conditions={
                             "reel_weights": {
                                 self.basegame_type: {"BR0": 1},
@@ -150,7 +150,7 @@ class GameConfig(Config):
                 name="bonus",
                 cost=200,
                 rtp=self.rtp,
-                max_win=self.wincap,
+                max_win=mode_maxwins["bonus"],
                 auto_close_disabled=False,
                 is_feature=True,
                 is_buybonus=False,
@@ -158,7 +158,7 @@ class GameConfig(Config):
                     Distribution(
                         criteria="wincap",
                         quota=0.001,
-                        win_criteria=self.wincap,
+                        win_criteria=mode_maxwins["bonus"],
                         conditions={
                             "reel_weights": {
                                 self.basegame_type: {"BR0": 1},
@@ -205,5 +205,3 @@ class GameConfig(Config):
                 ],
             ),
         ]
-
-        # Optimisation(rtp, avgWin, hit-rate, recordConditions)
