@@ -278,12 +278,14 @@ class GameConfig(Config):
             "force_wincap": False,
             "force_freegame": False,
         }
+        mode_maxwins = {"base": 5000, "bonus": 5000}
+
         self.bet_modes = [
             BetMode(
                 name="base",
                 cost=1.0,
                 rtp=self.rtp,
-                max_win=self.wincap,
+                max_win=mode_maxwins["base"],
                 auto_close_disabled=False,
                 is_feature=True,
                 is_buybonus=False,
@@ -300,7 +302,7 @@ class GameConfig(Config):
                 name="bonus",
                 cost=100.0,
                 rtp=self.rtp,
-                max_win=self.wincap,
+                max_win=mode_maxwins["bonus"],
                 auto_close_disabled=False,
                 is_feature=False,
                 is_buybonus=True,

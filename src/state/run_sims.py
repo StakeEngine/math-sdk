@@ -44,6 +44,9 @@ def create_books(
                 for d in bm.get_distributions():
                     if d.get_fixed_amt() is not None:
                         sim_counter += d.get_fixed_amt()
+                # mode-level wincap override
+                gamestate.config.wincap = bm.get_wincap()
+
         set_sim_amount = False
         if sim_counter > 0:
             set_sim_amount = True

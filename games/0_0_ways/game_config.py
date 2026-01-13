@@ -72,12 +72,14 @@ class GameConfig(Config):
         for r, f in reels.items():
             self.reels[r] = self.read_reels_csv(os.path.join(self.reels_path, f))
 
+        mode_maxwins = {"base": 5000, "bonus": 5000, "superspin": 2000}
+
         self.bet_modes = [
             BetMode(
                 name="base",
                 cost=1.0,
                 rtp=self.rtp,
-                max_win=self.wincap,
+                max_win=mode_maxwins["base"],
                 auto_close_disabled=False,
                 is_feature=True,
                 is_buybonus=False,
@@ -85,7 +87,7 @@ class GameConfig(Config):
                     Distribution(
                         criteria="wincap",
                         quota=0.001,
-                        win_criteria=self.wincap,
+                        win_criteria=mode_maxwins["base"],
                         conditions={
                             "reel_weights": {
                                 self.basegame_type: {"BR0": 1},
@@ -138,7 +140,7 @@ class GameConfig(Config):
                 name="bonus",
                 cost=100.0,
                 rtp=self.rtp,
-                max_win=self.wincap,
+                max_win=mode_maxwins["bonus"],
                 auto_close_disabled=False,
                 is_feature=False,
                 is_buybonus=True,
