@@ -151,7 +151,6 @@ def run(
     mult_step: int = 500,
 ):
     """Generate payout probabilities and write Excel file"""
-    rtp_allocation = 0.01
     game_config = load_game_config(game_id)
     mode_info = get_mode_dict(game_config)
     files = get_def_lut_names(game_config)
@@ -169,7 +168,7 @@ def run(
     bbb = {}
     for bs in bet_sizes:
         mode_outcomes, mode_max_prize, mode_expected_hit_rates, expected_profit = get_all_mode_values(
-            dists, costs, promotion_mult, 0.01, bs, 0.97
+            dists, costs, promotion_mult, rtp_allocation, bs, game_config.rtp
         )
         bbb[bs] = mode_max_prize
 
