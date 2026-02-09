@@ -192,9 +192,9 @@ def run(
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-g", dest="game_id", help="enter game_id, folder name within games/")
+    parser.add_argument("-g", dest="game_id", default="0_0_lines", help="enter game_id, folder name within games/")
     parser.add_argument("-ms", dest="step", default=int(500))
     parser.add_argument("-ra", dest="allocation", default=0.01)
     args = parser.parse_args()
 
-    run("0_0_lines", rtp_allocation=args.allocation, mult_step=args.step)
+    run(args.game_id, rtp_allocation=args.allocation, mult_step=args.step)
