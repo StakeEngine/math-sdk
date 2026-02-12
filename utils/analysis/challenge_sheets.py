@@ -165,12 +165,9 @@ def run(
     for f in files:
         dists.append(make_win_distribution(f))
 
-    bbb = {}
-    for bs in bet_sizes:
-        mode_outcomes, mode_max_prize, mode_expected_hit_rates, expected_profit = get_all_mode_values(
-            dists, costs, promotion_mult, rtp_allocation, bs, game_config.rtp
-        )
-        bbb[bs] = mode_max_prize
+    mode_outcomes, mode_max_prize, mode_expected_hit_rates, expected_profit = get_all_mode_values(
+        dists, costs, promotion_mult, rtp_allocation, 1.0, game_config.rtp
+    )
 
     write_xlsx(
         "challenge_amounts",
