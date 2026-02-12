@@ -90,11 +90,11 @@ def write_xlsx(
     bet_size_array: list,
     game_rtp: float,
     additional_rtp: float,
-    challange_multipliers: list,
-    challange_probs: dict,
-    challange_expected_hits: dict,
-    challange_max_payouts: dict,
-    challange_profits: dict,
+    challenge_multipliers: list,
+    challenge_probs: dict,
+    challenge_expected_hits: dict,
+    challenge_max_payouts: dict,
+    challenge_profits: dict,
 ):
     """Write payouts, and expected profit/hit-rates."""
     workbook = xlsxwriter.Workbook(f"games/{game_id}/library/" + file_name + ".xlsx")
@@ -104,11 +104,11 @@ def write_xlsx(
     maxtrix_worksheet.set_column("A:A", 20, bold)
     maxtrix_worksheet.write(0, 0, "Bet Size (->)")
     maxtrix_worksheet.write(1, 0, "Challenge Multiplier")
-    for idx, chal in enumerate(challange_multipliers):
+    for idx, chal in enumerate(challenge_multipliers):
         maxtrix_worksheet.write(2 + idx, 0, str(chal) + "x")
         for idy, bet in enumerate(bet_size_array):
             maxtrix_worksheet.write(0, 1 + idy, bet)
-            maxtrix_worksheet.write(2 + idx, idy + 1, challange_max_payouts[chal] * bet)
+            maxtrix_worksheet.write(2 + idx, idy + 1, challenge_max_payouts[chal] * bet)
 
     worksheet = workbook.add_worksheet(game_id)
     worksheet.set_column("A:F", 20, bold)
@@ -117,23 +117,23 @@ def write_xlsx(
         [
             game_name,
             f"Base Game RTP: {game_rtp*100}%",
-            f"Challange RTP: {additional_rtp*100}%",
+            f"challenge RTP: {additional_rtp*100}%",
             f"Bet Size: {bet_size}",
         ],
     )
     worksheet.write_row(
         "A3",
-        ["Challange Multiplier", "Max Award", "", "Expected Hit Rate", "Actual Probability", "Expected Profit"],
+        ["challenge Multiplier", "Max Award", "", "Expected Hit Rate", "Actual Probability", "Expected Profit"],
     )
 
     # Write results
-    probabilities = list(challange_probs.values())
-    expected_hits = list(challange_expected_hits.values())
-    expected_profit = list(challange_profits.values())
-    max_payouts = list(challange_max_payouts.values())
+    probabilities = list(challenge_probs.values())
+    expected_hits = list(challenge_expected_hits.values())
+    expected_profit = list(challenge_profits.values())
+    max_payouts = list(challenge_max_payouts.values())
     row_start_index = 3
-    for idx, _ in enumerate(challange_multipliers):
-        worksheet.write(row_start_index + idx, 0, str(challange_multipliers[idx]))
+    for idx, _ in enumerate(challenge_multipliers):
+        worksheet.write(row_start_index + idx, 0, str(challenge_multipliers[idx]))
         worksheet.write(row_start_index + idx, 1, str(max_payouts[idx]))
 
         worksheet.write(row_start_index + idx, 3, str(expected_hits[idx]))
