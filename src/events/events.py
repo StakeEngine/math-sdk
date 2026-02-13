@@ -11,7 +11,7 @@ def json_ready_sym(symbol: object, special_attributes: list = None):
 
     for attr in special_attributes:
         if hasattr(symbol, attr) and getattr(symbol, attr):
-            print_sym[attr] = True
+            print_sym[attr] = getattr(symbol, attr)
         elif attr in symbol.defn.special_flags:
             print_sym[attr] = True
 
