@@ -1,0 +1,17 @@
+d: magic_money
+name: Magic Money
+provider: itsmagicc
+
+math:
+  type: slot
+  reels: 5
+  rows: 3
+  paylines: 10
+
+bet:
+  min: 0.10
+  max: 100
+  default: 1
+
+rtp:
+  target: 0.96
