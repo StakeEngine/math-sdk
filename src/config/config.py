@@ -81,7 +81,10 @@ class Config:
             },
         }
 
-    def get_win_level(self, win_amount: float, winlevel_key: str) -> int:
+    def get_win_level(self, win_amount: float, winlevel_key: str, mode_max_win: float = None) -> int:
+        """Calculate win level using mode-specific max win if provided."""
+        if mode_max_win is None:
+            mode_max_win = self.wincap
         levels = {}
         if winlevel_key == "standard":
             levels = {
@@ -93,8 +96,8 @@ class Config:
                 6: (15.0, 30.0),
                 7: (30.0, 50.0),
                 8: (50.0, 100.0),
-                9: (100.0, self.wincap),
-                10: (self.wincap, float("inf")),
+                9: (100.0, mode_max_win),
+                10: (mode_max_win, float("inf")),
             }
         elif winlevel_key == "endFeature":
             levels = {
@@ -106,8 +109,8 @@ class Config:
                 6: (50.0, 100.0),
                 7: (100.0, 500.0),
                 8: (500.0, 2000.0),
-                9: (2000.0, self.wincap),
-                10: (self.wincap, float("inf")),
+                9: (2000.0, mode_max_win),
+                10: (mode_max_win, float("inf")),
             }
         
         for idx, pair in levels.items():
