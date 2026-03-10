@@ -82,7 +82,34 @@ class Config:
         }
 
     def get_win_level(self, win_amount: float, winlevel_key: str) -> int:
-        levels = self.win_levels[winlevel_key]
+        levels = {}
+        if winlevel_key == "standard":
+            levels = {
+                1: (0, 0.1),
+                2: (0.1, 1.0),
+                3: (1.0, 2.0),
+                4: (2.0, 5.0),
+                5: (5.0, 15.0),
+                6: (15.0, 30.0),
+                7: (30.0, 50.0),
+                8: (50.0, 100.0),
+                9: (100.0, self.wincap),
+                10: (self.wincap, float("inf")),
+            }
+        elif winlevel_key == "endFeature":
+            levels = {
+                1: (0.0, 1.0),
+                2: (1.0, 5.0),
+                3: (5.0, 10.0),
+                4: (10.0, 20.0),
+                5: (20.0, 50.0),
+                6: (50.0, 100.0),
+                7: (100.0, 500.0),
+                8: (500.0, 2000.0),
+                9: (2000.0, self.wincap),
+                10: (self.wincap, float("inf")),
+            }
+        
         for idx, pair in levels.items():
             if win_amount >= pair[0] and win_amount < pair[1]:
                 return idx
