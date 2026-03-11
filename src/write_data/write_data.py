@@ -151,9 +151,11 @@ def output_lookup_and_force_files(
                     decompressed = zstd.ZstdDecompressor().decompress(infile.read())
                     outfile.write(decompressed.decode("UTF-8"))
 
+        # Stream-compress to avoid MemoryError on large sim sets
         final_out = gamestate.output_files.get_final_book_name(betmode, True)
+        compressor = zstd.ZstdCompressor()
         with open(temp_book_output_path, "rb") as f_in, open(final_out, "wb") as f_out:
-            f_out.write(zstd.ZstdCompressor().compress(f_in.read()))
+            compressor.copy_stream(f_in, f_out)
 
         os.remove(temp_book_output_path)
     else:
