@@ -216,7 +216,9 @@ def execute_all_tests(config, excluded_modes=[]):
 
             win_dist, lut_payouts, weights_range, min_win, max_win = verify_lookup_format(lut_file)
             # Fast path: use verification.json sidecar if available
-            verification_file = os.path.join(config.publish_path, f"books_{name}.verification.json")
+            verification_file = os.path.join(
+                os.path.join(config.library_path, "configs"), f"books_{name}.verification.json"
+            )
             if os.path.exists(verification_file):
                 print(f"[FAST PATH] Using verification sidecar for {name}")
                 with open(verification_file, "r", encoding="UTF-8") as vf:
