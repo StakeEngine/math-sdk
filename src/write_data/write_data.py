@@ -7,6 +7,7 @@ import os
 import hashlib
 import json
 import ast
+import pickle as _pickle
 import zstandard as zstd
 
 
@@ -260,8 +261,39 @@ def output_lookup_and_force_files(
             with open(filename, "r", encoding="UTF-8") as infile:
                 outfile.write(infile.read())
 
+    # Build verification.json from payout sidecars
+    sidecar_list = []
+    for repeat_index in range(num_repeats):
+        for thread in range(threads):
+            temp_name = gamestate.output_files.get_temp_multi_thread_name(betmode, thread, repeat_index, compress)
+            sidecar_name = temp_name.rsplit(".", 2)[0] + ".payouts"
+            if os.path.exists(sidecar_name):
+                sidecar_list.append(sidecar_name)
+    if sidecar_list:
+        merged_payouts = []
+        for sc in sidecar_list:
+            with open(sc, "r", encoding="UTF-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        merged_payouts.append(int(line))
 
-def write_json(gamestate, filename: str):
+        payout_hash = hashlib.md5(_pickle.dumps(merged_payouts)).hexdigest()
+        book_file = gamestate.output_files.get_final_book_name(betmode, compress)
+        file_hash = get_sha_256(book_file)
+
+        verification = {
+            "payout_hash": payout_hash,
+            "file_hash": file_hash,
+            "num_entries": len(merged_payouts),
+        }
+        verification_path = os.path.join(gamestate.output_files.config_path, f"books_{betmode}.verification.json")
+        with open(verification_path, "w", encoding="UTF-8") as f:
+            json.dump(verification, f, indent=2)
+        print(f"Wrote verification file: {verification_path}")
+
+
+def write_json(gamestate, filename: str, payout_ints=None):
     """Convert the list of dictionaries to a JSON-encoded string and compress it in chunks."""
     json_objects = [json.dumps(item) for item in gamestate.library.values()]
     combined_data = "\n".join(json_objects) + "\n"
@@ -278,6 +310,13 @@ def write_json(gamestate, filename: str):
             else:
                 j_regular = [item for item in gamestate.library.values()]
                 f.write(json.dumps(j_regular))
+
+    # Write payout sidecar if captured at imprint_wins
+    if payout_ints is not None:
+        sidecar_name = filename.rsplit(".", 2)[0] + ".payouts"
+        with open(sidecar_name, "w", encoding="UTF-8") as f:
+            for p in payout_ints:
+                f.write(f"{p}\n")
 
 
 def print_recorded_wins(gamestate: object, name: str = ""):

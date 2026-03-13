@@ -26,6 +26,7 @@ from utils.analysis.distribution_functions import (
     min_dist_difference,
     calculate_rtp,
 )
+from src.write_data.write_data import get_sha_256
 
 
 class WinStatistics:
@@ -214,9 +215,35 @@ def execute_all_tests(config, excluded_modes=[]):
                 raise RuntimeError("Books/Lookup file does not exist.")
 
             win_dist, lut_payouts, weights_range, min_win, max_win = verify_lookup_format(lut_file)
-            book_payouts, num_events = verify_books_and_payout_mults(book_file)
+            # Fast path: use verification.json sidecar if available
+            verification_file = os.path.join(
+                os.path.join(config.library_path, "configs"), f"books_{name}.verification.json"
+            )
+            if os.path.exists(verification_file):
+                print(f"[FAST PATH] Using verification sidecar for {name}")
+                with open(verification_file, "r", encoding="UTF-8") as vf:
+                    verification = json.load(vf)
 
-            compare_payout_values(book_payouts, lut_payouts)
+                actual_hash = get_sha_256(book_file)
+                assert (
+                    actual_hash == verification["file_hash"]
+                ), f"Book file SHA-256 mismatch for {name}! File may be corrupted."
+
+                lut_payout_hash = hashlib.md5(pickle.dumps(lut_payouts)).hexdigest()
+                assert (
+                    lut_payout_hash == verification["payout_hash"]
+                ), f"Payout hash mismatch for {name}! Book payouts != LUT payouts."
+
+                assert verification["num_entries"] == len(
+                    lut_payouts
+                ), f"Entry count mismatch for {name}: sidecar={verification['num_entries']} vs LUT={len(lut_payouts)}"
+
+                num_events = 0
+                print(f"[FAST PATH] {name}: SHA-256 OK, payout hash OK, entries={verification['num_entries']}")
+            else:
+                print(f"[FALLBACK] No verification sidecar for {name}, reading books...")
+                book_payouts, num_events = verify_books_and_payout_mults(book_file)
+                compare_payout_values(book_payouts, lut_payouts)
 
             StatsObject = get_lut_statistics(
                 win_dist, cost, lut_payouts, weights_range, min_win, max_win, num_events

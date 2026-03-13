@@ -26,6 +26,7 @@ class GeneralGameState(ABC):
         self.win_manager = WinManager(self.config.basegame_type, self.config.freegame_type, config.wincap)
         self.library = {}
         self.recorded_events = {}
+        self._payout_ints = []
         self.special_symbol_functions = {}
         self.temp_wins = []
         self.create_symbol_map()
@@ -183,6 +184,7 @@ class GeneralGameState(ABC):
                 }
         self.temp_wins = []
         self.library[self.sim + 1] = copy(self.book.to_json())
+        self._payout_ints.append(self.library[self.sim + 1]["payoutMultiplier"])
         self.win_manager.update_end_round_wins()
 
     def update_final_win(self) -> None:
@@ -275,12 +277,10 @@ class GeneralGameState(ABC):
             flush=True,
         )
 
-        write_json(
-            self,
-            self.output_files.get_temp_multi_thread_name(
-                betmode, thread_index, repeat_count, (compress) * True + (not compress) * False
-            ),
+        temp_book_name = self.output_files.get_temp_multi_thread_name(
+            betmode, thread_index, repeat_count, (compress) * True + (not compress) * False
         )
+        write_json(self, temp_book_name, payout_ints=self._payout_ints)
         print_recorded_wins(self, self.output_files.get_temp_force_name(betmode, thread_index, repeat_count))
         make_lookup_tables(self, self.output_files.get_temp_lookup_name(betmode, thread_index, repeat_count))
         make_lookup_pay_split(self, self.output_files.get_temp_segmented_name(betmode, thread_index, repeat_count))
