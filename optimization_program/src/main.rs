@@ -114,6 +114,7 @@ fn run_farm(
         }
         println!("\nCreating {} Fence\n", fence.name);
         sort_wins_by_parameter(&mut fence, &force_options, &mut lookup_table);
+        exit_if_fence_has_no_books(fence);
 
         let bias_betmode: Vec<BiasJson> = config_file.bias[bias_index].bias.clone();
         let mut bias_fence: Option<BiasJson> = None;
@@ -734,6 +735,47 @@ fn sort_wins_by_parameter(
             }
         }
     }
+}
+
+fn exit_if_fence_has_no_books(fence: &Fence) {
+    if !fence.win_dist.is_empty() {
+        return;
+    }
+
+    let search_terms = fence
+        .identity_condition
+        .search
+        .iter()
+        .map(|search_key| format!("{}={}", search_key.name, search_key.value))
+        .collect::<Vec<String>>()
+        .join(", ");
+    let search_description = if search_terms.is_empty() {
+        String::from("<any remaining book>")
+    } else {
+        search_terms
+    };
+    let range_description = if fence.identity_condition.win_range_start == -1.0
+        && fence.identity_condition.win_range_end == -1.0
+    {
+        String::from("<any payout>")
+    } else {
+        format!(
+            "{}..{}",
+            fence.identity_condition.win_range_start, fence.identity_condition.win_range_end
+        )
+    };
+
+    eprintln!(
+        "optimizer fence '{}' matched 0 books after prior fences were assigned. \
+         Search: [{}], payout range: {}, opposite: {}. \
+         Fence identity conditions must be populated and mutually exclusive, \
+         or an earlier overlapping fence may consume all matching book IDs.",
+        fence.name,
+        search_description,
+        range_description,
+        fence.identity_condition.opposite
+    );
+    std::process::exit(1);
 }
 
 fn parse_fence_info(
