@@ -148,17 +148,16 @@ def output_lookup_and_force_files(
         final_out = gamestate.output_files.get_final_book_name(betmode, True)
         compressor = zstd.ZstdCompressor()
         with open(final_out, "wb") as f_out:
-            writer = compressor.stream_writer(f_out)
-            for fname in file_list:
-                dctx = zstd.ZstdDecompressor()
-                with open(fname, "rb") as f_in:
-                    reader = dctx.stream_reader(f_in)
-                    while True:
-                        chunk = reader.read(65536)
-                        if not chunk:
-                            break
-                        writer.write(chunk)
-            writer.close()
+            with compressor.stream_writer(f_out, closefd=False) as writer:
+                for fname in file_list:
+                    dctx = zstd.ZstdDecompressor()
+                    with open(fname, "rb") as f_in:
+                        with dctx.stream_reader(f_in) as reader:
+                            while True:
+                                chunk = reader.read(65536)
+                                if not chunk:
+                                    break
+                                writer.write(chunk)
     else:
         with open(
             gamestate.output_files.get_final_book_name(betmode, False),
