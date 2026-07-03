@@ -100,7 +100,7 @@ class GameConfig(Config):
         }
 
         # ── Reels ──
-        reel_files = {"BR0": "BR0.csv", "FR0": "FR0.csv"}
+        reel_files = {"BR0": "BR0.csv", "FR0": "FR0.csv", "FRW": "FRW.csv"}
         self.reels = {}
         for name, filename in reel_files.items():
             self.reels[name] = self.read_reels_csv(os.path.join(self.reels_path, filename))
@@ -134,7 +134,9 @@ class GameConfig(Config):
         basegame_cond = _cond(force_fg=False, force_wincap=False, reel_base="BR0", reel_free="FR0")
         zerowin_cond  = _cond(force_fg=False, force_wincap=False, reel_base="BR0", reel_free="FR0")
 
-        wincap_cond = _cond(force_fg=True, force_wincap=True, reel_base="BR0", reel_free="FR0")
+        # Wincap books draw free spins from the seed-rich FRW strip: regular FR0 is
+        # deliberately too sparse to ever stack the board to exactly 25000x.
+        wincap_cond = _cond(force_fg=True, force_wincap=True, reel_base="BR0", reel_free="FRW")
         wincap_cond["scatter_triggers"] = {3: 1}
         wincap_cond["wild_mult_values"][self.freegame_type] = {2: 40, 4: 30, 8: 20, 16: 10}
 
