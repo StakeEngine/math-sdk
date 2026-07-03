@@ -7,7 +7,7 @@ Riso-print streetwear slot on the proven expanding-sticky-wild engine:
     (x2 -> x128) — the AURA FARMING signature mechanic.
   - MONSOON retrigger: +5 spins, every seed levels up instantly.
   - Buys: HARVEST (bonus, 100x) and GREENHOUSE (super_bonus, 250x,
-    3 pre-planted level-2 seeds).
+    1 pre-planted level-2 seed).
 """
 
 import os
@@ -144,12 +144,15 @@ class GameConfig(Config):
             "reel_weights": {self.basegame_type: {"BR0": 1}, self.freegame_type: {"FR0": 1}},
             "scatter_triggers": {3: 1},
         }
-        # GREENHOUSE super buy — 3 pre-planted level-2 seeds
+        # GREENHOUSE super buy — 1 pre-planted level-2 seed (a "grown" start).
+        # 3 permanent full-reel seeds proved an unfenceable payout floor: full-column
+        # wilds intersect EVERY payline, so their product multiplies every win from
+        # spin 1 and the average blows past the 0.95x250 fence with zero low books.
         super_bonus_cond = {
             **freegame_cond,
             "reel_weights": {self.basegame_type: {"BR0": 1}, self.freegame_type: {"FR0": 1}},
             "scatter_triggers": {3: 1},
-            "pre_placed_wilds": 3,
+            "pre_placed_wilds": 1,
             "pre_placed_level": 2,
         }
 

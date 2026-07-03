@@ -86,14 +86,22 @@ class GameExecutables(GameCalculations):
         self.run_freespin()
 
     # ── AURA FARMING ─────────────────────────────────────────────────
-    def level_up_sticky_wilds(self) -> None:
-        """Every surviving seed levels up: multiplier doubles, capped at x128.
+    def level_up_sticky_wilds(self, all_seeds: bool = False) -> None:
+        """Water the farm: a seed levels up (multiplier doubles, cap x128).
 
-        This is the signature mechanic — the escalation lives HERE, not in
-        the landing roll. A seed that survives the whole bonus walks from
-        x2 to x128, and seeds MULTIPLY together on a line (engine-native).
+        Per spin the farm waters ONE random seed; a MONSOON (retrigger)
+        waters ALL of them at once. Doubling every seed every spin proved
+        geometrically unreachable for the optimizer fences (avg-win blowup
+        with 3 greenhouse seeds), so single-watering is the balanced form —
+        seeds still walk x2 -> x128 and MULTIPLY together on a line.
         """
-        for sw in self.sticky_wild_reels:
+        if not self.sticky_wild_reels:
+            return
+        if all_seeds:
+            for sw in self.sticky_wild_reels:
+                sw["mult"] = min(sw["mult"] * 2, AURA_CAP)
+        else:
+            sw = random.choice(self.sticky_wild_reels)
             sw["mult"] = min(sw["mult"] * 2, AURA_CAP)
 
     def restore_sticky_wilds(self) -> None:

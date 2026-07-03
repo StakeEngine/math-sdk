@@ -68,7 +68,7 @@ class GameState(GameStateOverride):
         while self.fs < self.tot_fs and not self.wincap_triggered:
             self.update_freespin()
 
-            # AURA FARMING: seeds level up at the start of every spin after their first
+            # AURA FARMING: the farm waters ONE seed at the start of every spin
             if self.fs > 1:
                 self.level_up_sticky_wilds()
 
@@ -87,9 +87,9 @@ class GameState(GameStateOverride):
 
             triggered, scatter_positions = self.check_scatter_trigger()
             if triggered:
-                # MONSOON: +5 spins and every planted seed levels up instantly
+                # MONSOON: +5 spins and EVERY planted seed levels up instantly
                 self.tot_fs += 5
-                self.level_up_sticky_wilds()
+                self.level_up_sticky_wilds(all_seeds=True)
 
             self.win_data = Lines.get_lines(
                 self.board, self.config, global_multiplier=self.global_multiplier
