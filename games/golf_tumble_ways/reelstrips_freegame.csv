@@ -1,0 +1,10 @@
+# Placeholder freegame reelstrip — higher wild/scatter density than base, NOT tuned.
+reel1,reel2,reel3,reel4,reel5
+W,L1,H2,W,H3
+L2,H4,S,H1,L4
+L3,L2,W,L2,S
+H2,L4,H4,S,H2
+S,H1,L2,L4,L3
+W,L3,H3,H1,W
+L4,W,L4,L1,S
+H4,S,L3,H2,L2

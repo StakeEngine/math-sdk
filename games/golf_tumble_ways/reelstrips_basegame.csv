@@ -1,0 +1,11 @@
+# Placeholder reelstrip — 5 reels, symbol per row, NOT weighted/tuned yet.
+# Real reelstrips need far more rows per reel and careful weighting for RTP.
+reel1,reel2,reel3,reel4,reel5
+H1,L1,H2,L3,H3
+L2,H4,L1,H1,L4
+L3,L2,W,L2,L1
+H2,L4,H4,S,H2
+L1,H1,L2,L4,L3
+S,L3,H3,H1,W
+L4,W,L4,L1,S
+H4,L1,L3,H2,L2
